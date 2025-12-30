@@ -1,21 +1,33 @@
 #!/usr/bin/env python3
-#server/seed.py
 
 from app import app
 from models import db, Pet
 
 with app.app_context():
 
-    # Create an empty list
-    pets = []
+    # 1. Clear existing data to prevent duplicates
+    print("Deleting existing pets...")
+    Pet.query.delete()
 
-    # Add some Pet instances to the list
-    pets.append(Pet(name = "Fido", species = "Dog"))
-    pets.append(Pet(name = "Whiskers", species = "Cat"))
-    pets.append(Pet(name = "Hermie", species = "Hamster"))
+    # 2. Create a list of specific Pet instances
+    print("Creating new pet records...")
+    pets = [
+        Pet(name="Fido", species="Dog"),
+        Pet(name="Whiskers", species="Cat"),
+        Pet(name="Hermie", species="Hamster"),
+        Pet(name="Slither", species="Snake"),
+        Pet(name="Bubbles", species="Fish"),
+        Pet(name="Rex", species="Dog"),
+        Pet(name="Goldie", species="Fish"),
+        Pet(name="Mittens", species="Cat"),
+        Pet(name="Polly", species="Bird"),
+        Pet(name="Speedy", species="Turtle")
+    ]
 
-    # Insert each Pet in the list into the database table
+    # 3. Add all pets to the session
     db.session.add_all(pets)
 
-    # Commit the transaction
+    # 4. Commit the transaction to the database
     db.session.commit()
+
+    print("Successfully seeded 10 pets!")
